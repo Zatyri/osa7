@@ -66,12 +66,12 @@ const Footer = () => (
   </div>
 )
 
+const InputNoReset = ({resetvalue, ...props}) => <input {...props}/>
+
 const CreateNew = (props) => {
-  /*
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-*/
+
+  
+
   const content = useField('text')
   const author = useField('text')
   const url = useField('text')
@@ -79,8 +79,8 @@ const CreateNew = (props) => {
   const history = useHistory()
 
   const handleSubmit = (e) => {
-    
     e.preventDefault()
+
     props.addNew({
       content: content.value,
       author: author.value,
@@ -92,6 +92,14 @@ const CreateNew = (props) => {
     props.addNotification(`A new anecdote was created: ${content.value}`)
   }
 
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.resetvalue()
+    author.resetvalue()
+    url.resetvalue()
+
+  }
+  
   
 
   return (
@@ -100,17 +108,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <InputNoReset {...content} />
         </div>
         <div>
           author
-          <input {...author} />
+          <InputNoReset {...author} />
         </div>
         <div>
           url for more info
-          <input {...url} ></input>
+          <InputNoReset {...url} ></InputNoReset>
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
