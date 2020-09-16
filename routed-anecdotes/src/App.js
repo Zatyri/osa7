@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link, useParams
+  Switch, Route, Link, useParams, Redirect, useHistory
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -30,10 +30,7 @@ const AnecdoteList = ({ anecdotes }) => (
 )
 
 const Anecdote = ({anecdotes}) => {
-  console.log(anecdotes);
-  
   const id = useParams().id
-  console.log(id);
   
   const anecdote = anecdotes.find(x => x.id === id)
   return (
@@ -43,7 +40,6 @@ const Anecdote = ({anecdotes}) => {
       <div>Votes: {anecdote.votes}</div>
       <a href={anecdote.info}>{anecdote.info}</a>
     </>
-
   )
 }
 
@@ -74,8 +70,10 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
 
   const handleSubmit = (e) => {
+    
     e.preventDefault()
     props.addNew({
       content,
@@ -83,6 +81,9 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    
+    history.push('/')
+    props.addNotification(`A new anecdote was created: ${content}`)
   }
 
   return (
@@ -99,7 +100,7 @@ const CreateNew = (props) => {
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} ></input>
         </div>
         <button>create</button>
       </form>
@@ -126,7 +127,14 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(undefined)
+
+  const addNotification = (notification) => {
+    setNotification(notification)
+    setTimeout(()=>{
+      setNotification(undefined)
+    },10000)
+  }
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
@@ -151,17 +159,19 @@ const App = () => {
     <Router>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification?<div>{notification}</div>:undefined}
       <Switch>
         <Route path='/anecdotes/:id'>
           <Anecdote anecdotes={anecdotes}/>
         </Route>
-        <Route path='/create'>
-          <CreateNew addNew={addNew} />
-        </Route>
+        <Route path='/create'>     
+          <CreateNew addNew={addNew} addNotification={addNotification}/>
+        </Route>  
         <Route path='/about'>
           <About />
         </Route>
         <Route path='/anecdotes'>
+          <div>{notification}</div>
           <AnecdoteList anecdotes={anecdotes}/>
         </Route>
         <Route path='/'>
