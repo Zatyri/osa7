@@ -64,19 +64,6 @@ const App = () => {
     }, 5000)
   }
 
-  const handleAddLike = async (blog) => {
-
-    const newBlog = { ...blog }
-    newBlog.likes += 1
-    newBlog.user = blog.user.id
-    try {
-      await blogService.put(newBlog)
-      updateBlogs()
-    } catch (error) {
-      message(error.message)
-    }
-  }
-
   const loginForm = () => (
     <>
       <p>{message}</p>
@@ -105,7 +92,7 @@ const App = () => {
         <Createblog handleMessage={handleMessage} updateBlogs={updateBlogs} hide={createBlogRef}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} message={handleMessage} update={updateBlogs} handleLike={handleAddLike}/>
+        <Blog key={blog.id} blog={blog} message={handleMessage} update={updateBlogs}/>
       )}
     </div>
   )

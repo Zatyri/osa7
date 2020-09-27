@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import {deleteBlogAction, likeAction} from '../reducers/blogReducer'
+import { useDispatch} from 'react-redux'
+
 
 const Blog = ({ blog, message, update, handleLike }) => {
+
+  const dispatch = useDispatch()
 
   const [visible, setVisible] = useState(false)
 
@@ -17,20 +21,14 @@ const Blog = ({ blog, message, update, handleLike }) => {
     visible?setVisible(false):setVisible(true)
   }
 
-  const handleAddLike = () => {
-    handleLike(blog)
+  const handleAddLike = () => { 
+    dispatch(likeAction(blog))
   }
 
-  const handleDelete = async () => {
-    const blogToDelete = blog
-    try {
-      await blogService.delBlog(blogToDelete)
-      message(`Blog ${blogToDelete.title} was deleted`)
-      update()
-    } catch (error) {
-      message(error.message)
-    }
 
+  const handleDelete = () => {
+    dispatch(deleteBlogAction(blog))
+    message(`Blog ${blog.title} was deleted`)
   }
 
   const showAll = () => (
