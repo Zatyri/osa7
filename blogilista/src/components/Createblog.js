@@ -9,15 +9,15 @@ const Createblog = ({ handleMessage, updateBlogs, hide }) => {
   const handleCreateBlog = async (event) => {
     event.preventDefault()
 
-    hide.current.toggleVisibility()
-
-    try{
-      const request = await blogService.post({ title, author, url })
+    try{      
+      
+      const request = await blogService.post({ title, author, url })      
       setTitle('')
       setAuthor('')
       setUrl('')
       updateBlogs()
       handleMessage(`A blog "${request.title}" by ${request.author} was created`)
+      hide.current.toggleVisibility()
     } catch(ex) {
       console.log(ex.message)
       handleMessage('Error posting blog')

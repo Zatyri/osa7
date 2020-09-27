@@ -4,13 +4,18 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Createblog from './components/Createblog'
 import Togglable from './components/Togglable'
+import {notificationAction, clearNotificationAction} from './reducers/notificationReducer'
+import {useSelector, useDispatch} from 'react-redux'
 
 const App = () => {
+   const dispatch = useDispatch()
+   const message = useSelector(state => state)
+
+
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const [message, setMessage] = useState('')
+  const [user, setUser] = useState(null)  
   const createBlogRef = useRef()
 
   useEffect(() => {
@@ -53,10 +58,10 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs( blogs ))
   }
 
-  const handleMessage = (text) => {
-    setMessage(text)
+  const handleMessage = (text) => { 
+    dispatch(notificationAction(text))
     setTimeout(() => {
-      setMessage('')
+      dispatch(clearNotificationAction())
     }, 5000)
   }
 
