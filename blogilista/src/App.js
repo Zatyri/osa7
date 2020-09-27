@@ -5,24 +5,23 @@ import loginService from './services/login'
 import Createblog from './components/Createblog'
 import Togglable from './components/Togglable'
 import {notificationAction, clearNotificationAction} from './reducers/notificationReducer'
+import {getBlogsAction} from './reducers/blogReducer'
 import {useSelector, useDispatch} from 'react-redux'
 
 const App = () => {
    const dispatch = useDispatch()
-   const message = useSelector(state => state)
-
-
-  const [blogs, setBlogs] = useState([])
+   const message = useSelector(state => state.notifications)
+  const blogs = useSelector(state => state.blogs)
+  
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)  
   const createBlogRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+
+    dispatch(getBlogsAction())
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -55,7 +54,7 @@ const App = () => {
   }
 
   const updateBlogs = () => {
-    blogService.getAll().then(blogs => setBlogs( blogs ))
+    dispatch(getBlogsAction())
   }
 
   const handleMessage = (text) => { 
@@ -77,7 +76,6 @@ const App = () => {
       message(error.message)
     }
   }
-
 
   const loginForm = () => (
     <>
