@@ -3,7 +3,7 @@ import {deleteBlogAction, likeAction} from '../reducers/blogReducer'
 import { useDispatch} from 'react-redux'
 
 
-const Blog = ({ blog, message, update, handleLike }) => {
+const Blog = ({ blog, message }) => {
 
   const dispatch = useDispatch()
 
@@ -24,7 +24,6 @@ const Blog = ({ blog, message, update, handleLike }) => {
   const handleAddLike = () => { 
     dispatch(likeAction(blog))
   }
-
 
   const handleDelete = () => {
     dispatch(deleteBlogAction(blog))

@@ -6,16 +6,18 @@ import Createblog from './components/Createblog'
 import Togglable from './components/Togglable'
 import {notificationAction, clearNotificationAction} from './reducers/notificationReducer'
 import {getBlogsAction} from './reducers/blogReducer'
+import {userLoggedInAction, userLoggedOutAction} from './reducers/userReducer'
 import {useSelector, useDispatch} from 'react-redux'
 
 const App = () => {
    const dispatch = useDispatch()
    const message = useSelector(state => state.notifications)
   const blogs = useSelector(state => state.blogs)
-  
+  const user = useSelector(state => state.user)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)  
+  //const [user, setUser] = useState(null)  
   const createBlogRef = useRef()
 
   useEffect(() => {
@@ -27,7 +29,7 @@ const App = () => {
     event.preventDefault()
     try{
       const user = await loginService.login({ username, password })
-      setUser(user)
+      dispatch(userLoggedInAction(user))
       window.localStorage.setItem(
         'userLogin', JSON.stringify(user)
       )
@@ -43,14 +45,14 @@ const App = () => {
     const userLoggedIn = window.localStorage.getItem('userLogin')
     if(userLoggedIn){
       const user = JSON.parse(userLoggedIn)
-      setUser(user)
+      dispatch(userLoggedInAction(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const handleLogout = () => {
     window.localStorage.removeItem('userLogin')
-    setUser('')
+    dispatch(userLoggedOutAction())
   }
 
   const updateBlogs = () => {
@@ -92,7 +94,7 @@ const App = () => {
         <Createblog handleMessage={handleMessage} updateBlogs={updateBlogs} hide={createBlogRef}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} message={handleMessage} update={updateBlogs}/>
+        <Blog key={blog.id} blog={blog} message={handleMessage}/>
       )}
     </div>
   )
