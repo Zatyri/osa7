@@ -1,9 +1,15 @@
-const userReducer = (state = null, action) => {
+import userService from '../services/users'
+
+const userReducer = (state = {loggedIn: '', users: []}, action) => {
     switch(action.type){
         case 'USER_LOGGED_IN':
-            return action.data
+            return {...state, loggedIn: action.data}
         case 'USER_LOGGED_OUT':
-            return null
+            return {...state, loggedIn: ''}
+        case 'USERS':
+            console.log('iran');
+            
+            return {...state, users: action.data}
         default: return state
     }
 }
@@ -18,6 +24,17 @@ export const userLoggedInAction = (content) => {
 export const userLoggedOutAction = () => {
     return {
         type: 'USER_LOGGED_OUT'
+    }
+}
+
+export const getUsersAction = () => {
+    return async dispatch => {
+        const users = await userService.getAll()
+        dispatch({
+            type: 'USERS',
+            data: users
+        })
+
     }
 }
 
