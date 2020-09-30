@@ -1,19 +1,29 @@
 import blogService from '../services/blogs'
+import commentService from '../services/comments'
+
+
 
 const blogReducer = (state = [], action) => {
+    let index
+    let updatedState
     switch(action.type){
         case 'INIT_BLOGS':
             return action.data
         case 'LIKE':            
-            const index = state.findIndex(blog => blog.id === action.data)
-            const updatedState = [...state]            
+            index = state.findIndex(blog => blog.id === action.data)
+            updatedState = [...state]            
             updatedState[index].likes += 1         
             return updatedState
         case 'DELETE':
-            const ind = state.findIndex(blog => blog.id === action.data)
-            const newstate = [...state] 
-            newstate.splice(ind,1)     
-            return newstate
+            index = state.findIndex(blog => blog.id === action.data)
+            updatedState = [...state] 
+            updatedState.splice(index,1)     
+            return updatedState
+        case 'COMMENT':
+            index = state.findIndex(blog => blog.id === action.data.blog.id)
+            updatedState = [...state]
+            updatedState[index].comments.push(action.data.newComment)
+            return updatedState
         default:
             return state
     }
@@ -50,7 +60,20 @@ export const deleteBlogAction = (content) => {
             data: content.id
         })
     }
+}
 
+export const commentAction = (comment, blog) => {
+    console.log(comment);
+    console.log(blog.id);
+    
+    
+    return async dispatch => {
+        const newComment = await commentService.comment(comment, blog)
+        dispatch({
+            type: 'COMMENT',
+            data: {newComment, blog}
+        })
+    }
 }
 
 export default blogReducer

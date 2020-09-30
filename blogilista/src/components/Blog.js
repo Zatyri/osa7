@@ -1,18 +1,24 @@
 import React from 'react'
+import Comments from './Comments'
 import {deleteBlogAction, likeAction} from '../reducers/blogReducer'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import {
   BrowserRouter as Router, Link, useParams
 } from 'react-router-dom'
 
 
-const Blog = ({ blogs, message }) => {
+const Blog = ({ message }) => {
 
   const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
 
   const id = useParams().id
-
+  
   const blog = blogs.find(x => x.id === id)
+
+  if(!blog){
+    return null
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -30,6 +36,8 @@ const Blog = ({ blogs, message }) => {
     dispatch(deleteBlogAction(blog))
     message(`Blog ${blog.title} was deleted`)
   }
+  console.log(blog);
+  
 
   return (    
     <div style={blogStyle} className='blogs'>
@@ -38,6 +46,7 @@ const Blog = ({ blogs, message }) => {
       <p className='like'>{blog.likes} <button className='like-button'onClick={handleAddLike}>like</button></p>
       <p>added by {blog.user.name}</p>
       <button className='delete-button' onClick={handleDelete}>delete</button>
+      <Comments blog={blog} />
       <div><Link to='/'>Back to blogs</Link></div>
     </div>
     

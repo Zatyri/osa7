@@ -1,6 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
+
 let token = null
 const setToken = newToken => {
   token = `bearer ${newToken}`
@@ -37,8 +38,8 @@ const delBlog = async blog => {
   const url = `${baseUrl}/${blog.id}`
   const response = await axios.delete(url, setAuth)
   return response
-
-
 }
+
+
 
 export default { getAll, post, setToken, put, delBlog }

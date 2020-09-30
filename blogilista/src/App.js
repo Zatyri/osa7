@@ -47,7 +47,7 @@ const App = () => {
         </div>
         <Switch>
           <Route path="/blogs/:id">
-            <Blog blogs={blogs}/>
+            <Blog />
           </Route>
           <Route exact path='/'>
             <ShowBlogs></ShowBlogs>
