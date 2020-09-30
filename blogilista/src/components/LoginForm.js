@@ -3,12 +3,15 @@ import { notificationAction, clearNotificationAction } from '../reducers/notific
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 import {userLoggedInAction} from '../reducers/userReducer'
+import {useHistory} from 'react-router-dom'
 
 import {useSelector,useDispatch} from 'react-redux'
 
 const LoginForm = () => {
     const dispatch = useDispatch()
     const message = useSelector(state => state.notifications)
+
+    const history = useHistory()
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -19,12 +22,13 @@ const LoginForm = () => {
         try{
           const user = await loginService.login({ username, password })
           setUsername('')
-          setPassword('')
+          setPassword('')          
           dispatch(userLoggedInAction(user))
           window.localStorage.setItem(
             'userLogin', JSON.stringify(user)
           )
           blogService.setToken(user.token)
+          history.push('/')
 
         } catch (ex) {
           handleMessage('Wrong username or password')

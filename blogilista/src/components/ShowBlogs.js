@@ -1,12 +1,12 @@
 import React, { useRef } from 'react'
-import Blog from './Blog'
 import Createblog from './Createblog'
 import Togglable from './Togglable'
-import Users from './Users'
 import {notificationAction, clearNotificationAction} from '../reducers/notificationReducer'
 import {getBlogsAction} from '../reducers/blogReducer'
-import {userLoggedOutAction} from '../reducers/userReducer'
 import {useSelector, useDispatch} from 'react-redux'
+import {
+  BrowserRouter as Router, Link
+} from 'react-router-dom'
 
 
 const ShowBlogs = () => {
@@ -17,10 +17,13 @@ const ShowBlogs = () => {
   
     const createBlogRef = useRef()
 
-    const handleLogout = () => {
-        window.localStorage.removeItem('userLogin')
-        dispatch(userLoggedOutAction())
-      }
+    const blogStyle = {
+      paddingTop: 10,
+      paddingLeft: 2,
+      border: 'solid',
+      borderWidth: 1,
+      marginBottom: 5
+    }
 
       const updateBlogs = () => {
         dispatch(getBlogsAction())
@@ -36,15 +39,13 @@ const ShowBlogs = () => {
     return (
         <div>
             <h2>blogs</h2>
-            <p>{message}</p>
-            <p>{user.loggedIn.name} is logged in <button onClick={handleLogout}>Logout</button></p>
-            <Togglable buttonLabel="Show create blog form" ref={createBlogRef}>
+            <p>{message}</p>            
+            {user.loggedIn?<Togglable buttonLabel="Show create blog form" ref={createBlogRef}>
             <Createblog handleMessage={handleMessage} updateBlogs={updateBlogs} hide={createBlogRef}/>
-            </Togglable>
-            {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} message={handleMessage}/>
-            )}
-            <Users/>
+            </Togglable>:''}     
+              {blogs.map(blog =>
+               <Link to={`/blogs/${blog.id}`} key={blog.id}><div style={blogStyle}>{blog.title} by {blog.author}</div></Link>
+              )}              
       </div>
     )
 }

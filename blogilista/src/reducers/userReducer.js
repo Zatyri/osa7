@@ -1,11 +1,11 @@
 import userService from '../services/users'
 
-const userReducer = (state = {loggedIn: '', users: []}, action) => {
+const userReducer = (state = {loggedIn: undefined, users: []}, action) => {
     switch(action.type){
         case 'USER_LOGGED_IN':
             return {...state, loggedIn: action.data}
         case 'USER_LOGGED_OUT':
-            return {...state, loggedIn: ''}
+            return {...state, loggedIn: undefined}
         case 'USERS':            
             return {...state, users: action.data}        
         default: return state
