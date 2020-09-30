@@ -6,10 +6,8 @@ const userReducer = (state = {loggedIn: '', users: []}, action) => {
             return {...state, loggedIn: action.data}
         case 'USER_LOGGED_OUT':
             return {...state, loggedIn: ''}
-        case 'USERS':
-            console.log('iran');
-            
-            return {...state, users: action.data}
+        case 'USERS':            
+            return {...state, users: action.data}        
         default: return state
     }
 }
@@ -34,8 +32,8 @@ export const getUsersAction = () => {
             type: 'USERS',
             data: users
         })
-
     }
 }
+
 
 export default userReducer
