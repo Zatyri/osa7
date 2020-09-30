@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {getUsersAction} from '../reducers/userReducer'
 import User from './User'
+import { Table } from 'react-bootstrap'
 
 
 const Users = () => {
@@ -30,7 +31,7 @@ const Users = () => {
     const allUsers = () => (
         <>
         <h2>Users</h2>
-        <table>
+        <Table striped>
             <tbody>
                 <tr>
                     <th>
@@ -43,7 +44,7 @@ const Users = () => {
                 {users.map(user => <tr key={user.id}><td style={linkStyle} onClick={() => handleClick(user.id)} >{user.name}</td><td>{user.blogs.length}</td></tr>)
                 }
             </tbody>
-        </table>
+        </Table>
         </>
     )
 

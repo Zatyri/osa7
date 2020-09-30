@@ -10,12 +10,12 @@ import {useSelector, useDispatch} from 'react-redux'
 import {
   BrowserRouter as Router, Switch, Route, Link
 } from 'react-router-dom'
+import {Nav, Navbar} from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const user = useSelector(state => state.user)
-  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)  
 
   useEffect(() => {
     dispatch(getBlogsAction())
@@ -38,13 +38,24 @@ const App = () => {
   const padding = { padding: 5 }
 
   return (
-    <div>
+    <div className='container'>
       <Router>
-        <div style={{backgroundColor: 'yellow'}}>
-          <Link style={padding} to='/'>blogs</Link>
-          <Link style={padding} to='/users'>users</Link>
-          {user.loggedIn?<span>{user.loggedIn.name} is logged in <button onClick={handleLogout}>Logout</button></span>:<Link to='/login'>login</Link>}  
-        </div>
+        <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
+          <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className='mr-auto'>
+            <Nav.Link href='#' as='span'>
+              <Link style={padding} to='/'>blogs</Link>
+                </Nav.Link>          
+                <Nav.Link href='#' as='span'>
+                  <Link style={padding} to='/users'>users</Link>
+                </Nav.Link>          
+                <Nav.Link href='#' as='span'>
+                  {user.loggedIn?<span>{user.loggedIn.name} is logged in <button onClick={handleLogout}>Logout</button></span>:<Link to='/login'>login</Link>}  
+                </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>      
+        </Navbar>
         <Switch>
           <Route path="/blogs/:id">
             <Blog />

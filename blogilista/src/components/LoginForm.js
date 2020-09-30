@@ -4,6 +4,7 @@ import blogService from '../services/blogs'
 import loginService from '../services/login'
 import {userLoggedInAction} from '../reducers/userReducer'
 import {useHistory} from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 
 import {useSelector,useDispatch} from 'react-redux'
 
@@ -45,19 +46,24 @@ const LoginForm = () => {
     return (
         <>
             <p>{message}</p>
-            <form onSubmit={handleLogin}>
-            <div>
-            Username:
-                <input id='username' type="text" value={username} onChange={({ target }) => setUsername(target.value)}>
-                </input>
-            </div>
-            <div>
-            Password:
-                <input id='password' type="text" value={password} onChange={({ target }) => setPassword(target.value)}>
-                </input>
-            </div>
-            <button id='login-button' type="submit">Login</button>
-            </form>
+            <Form onSubmit={handleLogin}>
+              <Form.Group>
+              <Form.Label>username:</Form.Label>
+                <Form.Control
+                  id='username'
+                  type="text"
+                  name="username"
+                  value={username} onChange={({ target }) => setUsername(target.value)}
+                /> 
+                <Form.Control
+                  id='password'
+                  type="text"
+                  name="password"
+                  value={password} onChange={({ target }) => setPassword(target.value)}
+                /> 
+                <Button variant='primary' id='login-button' type="submit">Login</Button>
+              </Form.Group>
+            </Form>
         </>
     )
 }

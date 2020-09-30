@@ -4,9 +4,8 @@ import Togglable from './Togglable'
 import {notificationAction, clearNotificationAction} from '../reducers/notificationReducer'
 import {getBlogsAction} from '../reducers/blogReducer'
 import {useSelector, useDispatch} from 'react-redux'
-import {
-  BrowserRouter as Router, Link
-} from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 
 const ShowBlogs = () => {
@@ -16,14 +15,6 @@ const ShowBlogs = () => {
     const user = useSelector(state => state.user)  
   
     const createBlogRef = useRef()
-
-    const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: 'solid',
-      borderWidth: 1,
-      marginBottom: 5
-    }
 
       const updateBlogs = () => {
         dispatch(getBlogsAction())
@@ -42,10 +33,23 @@ const ShowBlogs = () => {
             <p>{message}</p>            
             {user.loggedIn?<Togglable buttonLabel="Show create blog form" ref={createBlogRef}>
             <Createblog handleMessage={handleMessage} updateBlogs={updateBlogs} hide={createBlogRef}/>
-            </Togglable>:''}     
-              {blogs.map(blog =>
-               <Link to={`/blogs/${blog.id}`} key={blog.id}><div style={blogStyle}>{blog.title} by {blog.author}</div></Link>
-              )}              
+            </Togglable>:''}
+            <Table striped>
+              <tbody>
+                {blogs.map(blog =>
+                <tr key={blog.id}>
+                  <td>
+                    <Link to={`/blogs/${blog.id}`}>
+                      <div>{blog.title}</div>
+                    </Link>
+                  </td>
+                  <td>
+                    {blog.author}
+                  </td>
+                </tr>
+                )}   
+              </tbody>
+            </Table>             
       </div>
     )
 }

@@ -2,10 +2,7 @@ import React from 'react'
 import Comments from './Comments'
 import {deleteBlogAction, likeAction} from '../reducers/blogReducer'
 import { useDispatch, useSelector} from 'react-redux'
-import {
-  BrowserRouter as Router, Link, useParams
-} from 'react-router-dom'
-
+import {Link, useParams} from 'react-router-dom'
 
 const Blog = ({ message }) => {
 
@@ -36,8 +33,6 @@ const Blog = ({ message }) => {
     dispatch(deleteBlogAction(blog))
     message(`Blog ${blog.title} was deleted`)
   }
-  console.log(blog);
-  
 
   return (    
     <div style={blogStyle} className='blogs'>
